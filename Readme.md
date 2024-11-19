@@ -1,5 +1,7 @@
 # My Dotfiles Configuration
 
+![terminal-setup](./images/terminal-setup.png)
+
 This repository contains my personal configuration for **Neovim**, **WezTerm**, and **Fish Shell**. It allows you to replicate my setup on your own machine quickly and efficiently.
 
 ## Getting Started
