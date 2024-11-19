@@ -3,7 +3,7 @@ if status is-interactive
 end
 alias l="lsd"
 alias lt="lsd -ltr"
-alias brow="brave-browser --force-device-scale-factor=1 &>/dev/null & disown"
+alias brow="brave-browser --force-device-scale-factor=1.3 &>/dev/null & disown"
 alias ..="cd .."
 alias ubiwan="ssh f3652743@ubiwan.epsevg.upc.edu"
 alias vim="nvim"
@@ -26,3 +26,5 @@ function sudo --description "Replacement for Bash 'sudo !!' command to run last 
 end
 
 alias google-java-format='java -jar ~/custom-scripts/google-java-format.jar'
+
+neofetch

@@ -1,9 +1,10 @@
---- wezterm.lua
---- __      __      _
---- \ \    / /__ __| |_ ___ _ _ _ __
----  \ \/\/ / -_)_ /  _/ -_) '_| '  \
----   \_/\_/\___/__|\__\___|_| |_|_|_|
----
+---     ____              _     __   _____               ___       __          _
+---    / __ \____ __   __(_)___/ /  / ___/__  _______   /   | ____/ /___ ___  (_)___
+---   / / / / __ `/ | / / / __  /   \__ \/ / / / ___/  / /| |/ __  / __ `__ \/ / __ \
+---  / /_/ / /_/ /| |/ / / /_/ /   ___/ / /_/ (__  )  / ___ / /_/ / / / / / / / / / /
+--- /_____/\__,_/ |___/_/\__,_/   /____/\__, /____/  /_/  |_\__,_/_/ /_/ /_/_/_/ /_/
+---                                    /____/
+
 --- My Wezterm config file
 
 local wezterm = require("wezterm")
@@ -21,10 +22,10 @@ config.default_prog = { fish_path, "-l" }
 
 config.color_scheme = "Tokyo Night" -- You can change this to a lila-oriented theme
 config.font = wezterm.font_with_fallback({
-	{ family = "Iosevka Nerd Font", scale = 1.2, weight = "Medium" },
+	{ family = "Iosevka Nerd Font", scale = 1.4, weight = "Medium" },
 	{ family = "FantasqueSansM Nerd Font", scale = 1.3 },
 })
-config.window_background_opacity = 0.7
+config.window_background_opacity = 0.8
 config.window_decorations = "RESIZE"
 config.window_close_confirmation = "AlwaysPrompt"
 config.scrollback_lines = 3000
@@ -32,8 +33,7 @@ config.default_workspace = "main"
 
 -- Dim inactive panes
 config.inactive_pane_hsb = {
-	saturation = 0.24,
-	brightness = 0.5,
+	brightness = 0.35,
 }
 
 -- Key bindings
@@ -206,6 +206,45 @@ wezterm.on("update-status", function(window, pane)
 	-- Time
 	local time = wezterm.strftime("%H:%M")
 
+	-- IP address
+	local function get_local_ip()
+		local handle = io.popen("hostname -I | awk '{print $1}'")
+		local result = handle:read("*a")
+		handle:close()
+		return result:gsub("\n", "")
+	end
+
+	-- Battery
+	local bat = ""
+	local bat_color = "#FFFFFF" -- default color
+	for _, b in ipairs(wezterm.battery_info()) do
+		local charge_percentage = b.state_of_charge * 100
+		local icon = ""
+		-- Asigna el color según el porcentaje
+		if charge_percentage >= 95 then
+			icon = wezterm.nerdfonts.md_battery
+			bat_color = "#69FF94" -- Green
+		elseif charge_percentage >= 80 then
+			icon = wezterm.nerdfonts.md_battery_80
+			bat_color = "#69FF94" -- Green
+		elseif charge_percentage >= 40 then
+			icon = wezterm.nerdfonts.md_battery_60
+			bat_color = "#9D4EDD" -- Violet (for very low battery)
+		elseif charge_percentage >= 20 then
+			icon = wezterm.nerdfonts.md_battery_30
+			bat_color = "#F2AB53" -- Yellow
+		else
+			icon = wezterm.nerdfonts.md_battery_10
+			bat_color = "#C92929" -- Red
+		end
+
+		if b.state == "Charging" then
+			icon = wezterm.nerdfonts.md_battery_charging
+			bat_color = "#00DFF8" -- cyan
+		end
+		bat = icon .. " " .. string.format("%.0f%%", b.state_of_charge * 100)
+	end
+
 	-- Left status (left of the tab line)
 	window:set_left_status(wezterm.format({
 		{ Foreground = { Color = stat_color } },
@@ -225,6 +264,11 @@ wezterm.on("update-status", function(window, pane)
 		"ResetAttributes",
 		{ Text = " | " },
 		{ Text = wezterm.nerdfonts.md_clock .. "  " .. time },
+		{ Text = " | " },
+		{ Text = wezterm.nerdfonts.md_earth .. " " .. get_local_ip() },
+		{ Text = " | " },
+		{ Foreground = { Color = bat_color } }, -- yellow
+		{ Text = bat },
 		{ Text = "  " },
 	}))
 end)
