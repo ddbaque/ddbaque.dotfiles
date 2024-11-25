@@ -1,8 +1,3 @@
-vim.keymap.set("i", "<A-i>", "<Esc>", { noremap = true, silent = true })
-
-vim.api.nvim_set_keymap(
-  "n",
-  "<leader>f",
-  ":!java -jar ~/custom-scripts/google-java-format.jar --replace %<CR>",
-  { noremap = true, silent = true }
-)
+-- Keymaps are automatically loaded on the VeryLazy event
+-- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Add any additional keymaps here

@@ -13,6 +13,11 @@ alias robotc="/home/david/custom-scripts/compile-robot.sh"
 set -x VISUAL nvim
 set -x EDITOR nvim
 
+set -U fish_user_paths $fish_user_paths /home/david/.local/bin
+
+set -U fish_user_paths /usr/local/go/bin $fish_user_paths
+set -U fish_user_paths /home/david/go/bin $fish_user_paths
+
 alias fs="ranger"
 
 # funcition to replace sudo !! of bash
