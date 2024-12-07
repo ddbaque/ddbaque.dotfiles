@@ -33,3 +33,5 @@ end
 alias google-java-format='java -jar ~/custom-scripts/google-java-format.jar'
 
 neofetch
+
+eval "$(zoxide init fish)"

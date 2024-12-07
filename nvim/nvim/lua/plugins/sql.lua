@@ -14,7 +14,7 @@ return {
     "neovim/nvim-lspconfig",
     config = function()
       -- Define un comando para formatear usando sqlfluff
-      vim.api.nvim_create_user_command("SqlfluffFormat", function(_)
+      vim.api.nvim_create_user_command("SqlFormat", function(_)
         local dialect = "postgres" -- Cambia esto según tu dialecto preferido
         local cmd = string.format("sqlfluff format --dialect %s", dialect)
         vim.fn.system(cmd)
