@@ -23,4 +23,30 @@ return {
       end,
     }),
   },
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      -- Configuración del LSP para Java usando jdtls
+      local lspconfig = require("lspconfig")
+
+      lspconfig.jdtls.setup({
+        cmd = { "jdtls" },
+        root_dir = lspconfig.util.root_pattern(".git", "pom.xml", "gradlew", "mvnw"),
+        settings = {
+          java = {
+            eclipse = { downloadSources = true },
+            configuration = { updateBuildConfiguration = "automatic" },
+            maven = { downloadSources = true },
+            implementationsCodeLens = { enabled = true },
+            referencesCodeLens = { enabled = true },
+            references = { includeDecompiledSources = true },
+            format = { enabled = true },
+          },
+        },
+        init_options = {
+          bundles = {},
+        },
+      })
+    end,
+  },
 }
