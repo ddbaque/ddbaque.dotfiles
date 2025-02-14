@@ -1,9 +1,9 @@
 * {
-    font: "Figtree 13";
+    font: "Iosevka Nerd Font 20";
     g-spacing: 10px;
-    g-margin: 0;
+    g-margin: 4px;
     b-color: #000000FF;
-    fg-color: #FFFFFFFF;
+    fg-color: #DEE5FF;
     fgp-color: #888888FF;
     b-radius: 8px;
     g-padding: 8px;
@@ -12,14 +12,14 @@
     alt-color: #111111FF;
     wbg-color: #000000CC;
     w-border: 2px solid;
-    w-border-color: #FFFFFFFF;
+    w-border-color: #4B39F2;
     w-padding: 12px;
 }
 
 configuration {
     modi: "drun";
     show-icons: true;
-    display-drun: "";
+    display-drun: " ";
 }
 
 listview {
@@ -34,9 +34,9 @@ listview {
 
 window {
     transparency: "real";
-    width: 450px;
+    width: 600px;
     border-radius: @b-radius;
-    background-color: @wbg-color;
+    background-color: rgba(29, 23, 79, 0.6);
     border: @w-border;
     border-color: @w-border-color;
     padding: @w-padding;
@@ -76,12 +76,12 @@ element {
 }
 
 element normal.normal {
-	background-color: transparent;
+	background-color: rgba(119, 126, 255, 0.4);
 	text-color: @fg-color;
 }
 
 element alternate.normal {
-	background-color: @alt-color;
+	background-color: transparent;
 	text-color: @fg-color;
 }
 
@@ -91,7 +91,7 @@ element selected.active {
 }
 
 element selected.normal {
-	background-color: @hl-color;
+	background-color: #9EABFF;
 	text-color: @hlt-color;
 }
 
