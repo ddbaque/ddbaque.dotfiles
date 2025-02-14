@@ -158,6 +158,8 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
+# lock screen
+bindsym $mod+u exec i3lock -i ~/Downloads/tree-wallpaper.jpg
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -200,3 +202,7 @@ bar {
   hidden_state hide
   modifier Mod1
 }
+
+# gaps 
+gaps inner 5  
+gaps outer 1
