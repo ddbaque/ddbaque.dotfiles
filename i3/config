@@ -20,19 +20,28 @@ font pango:monospace 8
 #font pango:DejaVu Sans Mono 8
 
 # Config Second Monitor
-exec --no-startup-id xrandr --output DisplayPort-0 --auto --left-of HDMI-A-0
 
 # Start picom
 exec --no-startup-id picom 
 
 # Start feh
-exec --no-startup-id feh --bg-scale Downloads/one_piece_art_sabo_portgas_d_ace_luffy-wallpaper-2160x1440.jpg
-
+exec feh --bg-scale ~/Pictures/one_piece_luffy_chibi_art-wallpaper-2160x1440.jpg --bg-scale ~/Pictures/one_piece_luffy_chibi_art-wallpaper-2160x1440.jpg
 for_window [class="^.*"] border pixel 0
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
+
+# start dunst a daemon for notifications
+exec --no-startup-id dunst &
+
+# take screnshot 
+bindsym $mod+p exec flameshot gui 
+
+# start cronie
+exec --no-startup-id systemctl restart cronie
+
+# start battery_notification
 
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.

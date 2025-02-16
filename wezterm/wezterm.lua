@@ -208,7 +208,7 @@ wezterm.on("update-status", function(window, pane)
 
 	-- IP address
 	local function get_local_ip()
-		local handle = io.popen("hostname -I | awk '{print $1}'")
+		local handle = io.popen("hostname -i | awk '{print $1}'")
 		local result = handle:read("*a")
 		handle:close()
 		return result:gsub("\n", "")
