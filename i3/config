@@ -38,6 +38,10 @@ exec --no-startup-id dunst &
 # take screnshot 
 bindsym $mod+p exec flameshot gui 
 
+# control de brightness screen
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+
 # start cronie
 exec --no-startup-id systemctl restart cronie
 

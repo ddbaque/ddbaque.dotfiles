@@ -35,3 +35,4 @@ alias google-java-format='java -jar ~/custom-scripts/google-java-format.jar'
 neofetch
 
 eval "$(zoxide init fish)"
+nvm use v20.9.0 lts/iron
