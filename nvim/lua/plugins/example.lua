@@ -36,11 +36,7 @@ return {
     dependencies = { "hrsh7th/cmp-emoji" },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
-      table.insert(opts.sources, {
-        name = "emoji",
-
-        { name = "nvim_lsp" }, -- Fuente principal para LSP
-      })
+      table.insert(opts.sources, { name = "emoji" })
     end,
   },
 
@@ -76,13 +72,6 @@ return {
       servers = {
         -- pyright will be automatically installed with mason and loaded with lspconfig
         pyright = {},
-        gopls = {
-          on_attach = on_attach, -- Puedes definir esta función si necesitas personalizarla
-          capabilities = capabilities, -- Asegúrate de definir esto si lo usas
-          cmd = { "gopls" },
-          filetypes = { "go", "gomod", "gowork", "gotmpl" },
-          root_dir = require("lspconfig.util").root_pattern("go.work", "go.mod", ".git"),
-        },
       },
     },
   },
@@ -194,4 +183,15 @@ return {
   { import = "lazyvim.plugins.extras.lang.json" },
 
   -- add any tools you want to have installed below
+  {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "stylua",
+        "shellcheck",
+        "shfmt",
+        "flake8",
+      },
+    },
+  },
 }

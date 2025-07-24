@@ -88,5 +88,11 @@ end
 
 neofetch
 
+set -gx PNPM_HOME "/home/ddbaque/.local/share/pnpm"
+
+if not contains $PNPM_HOME $PATH
+    set -gx PATH $PNPM_HOME $PATH
+end
+
 eval "$(zoxide init fish)"
 nvm use v23.6.1

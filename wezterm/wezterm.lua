@@ -204,11 +204,51 @@ wezterm.on("update-status", function(window, pane)
 	cmd = cmd and basename(cmd) or ""
 
 	-- Time
-	local time = wezterm.strftime("%H:%M")
+	local time = wezterm.strftime("%a %b %-d %H:%M")
+
+	-- Git branch info
+	local function get_git_branch()
+		-- Get current working directory
+		local cwd = pane:get_current_working_dir()
+		local cwd_path = ""
+		if cwd then
+			if type(cwd) == "userdata" then
+				cwd_path = cwd.file_path
+			else
+				cwd_path = cwd
+			end
+		end
+		
+		-- Try multiple git commands to get branch
+		local commands = {
+			"cd '" .. cwd_path .. "' && git branch --show-current 2>/dev/null",
+			"cd '" .. cwd_path .. "' && git rev-parse --abbrev-ref HEAD 2>/dev/null",
+			"cd '" .. cwd_path .. "' && git symbolic-ref --short HEAD 2>/dev/null"
+		}
+		
+		for i, cmd in ipairs(commands) do
+			wezterm.log_info("Trying git command " .. i .. ": " .. cmd)
+			local handle = io.popen(cmd)
+			local result = handle:read("*a")
+			handle:close()
+			
+			wezterm.log_info("Git command " .. i .. " result: '" .. tostring(result) .. "'")
+			if result and result ~= "" then
+				local cleaned = result:gsub("\n", ""):gsub("^%s*(.-)%s*$", "%1")
+				if cleaned ~= "" then
+					wezterm.log_info("Git branch found: '" .. cleaned .. "'")
+					return cleaned
+				end
+			end
+		end
+		
+		wezterm.log_info("Git branch: no result from any command")
+		return nil
+	end
 
 	-- IP address
 	local function get_local_ip()
-		local handle = io.popen("hostname -i | awk '{print $1}'")
+		local handle = io.popen("hostname -I | awk '{print $1}'")
 		local result = handle:read("*a")
 		handle:close()
 		return result:gsub("\n", "")
@@ -245,6 +285,19 @@ wezterm.on("update-status", function(window, pane)
 		bat = icon .. " " .. string.format("%.0f%%", b.state_of_charge * 100)
 	end
 
+	-- Git branch with colors
+	local git_branch = get_git_branch()
+	local git_info = ""
+	local git_color = "#4B39F2" -- indigo (default, same as active tab)
+	if git_branch then
+		if git_branch == "main" then
+			git_color = "#ff5555" -- red
+		elseif git_branch == "dev" then
+			git_color = "#bd93f9" -- blue
+		end
+		git_info = wezterm.nerdfonts.dev_git_branch .. " " .. git_branch
+	end
+
 	-- Left status (left of the tab line)
 	window:set_left_status(wezterm.format({
 		{ Foreground = { Color = stat_color } },
@@ -254,7 +307,7 @@ wezterm.on("update-status", function(window, pane)
 	}))
 
 	-- Right status
-	window:set_right_status(wezterm.format({
+	local status_items = {
 		-- Wezterm has a built-in nerd fonts
 		-- https://wezfurlong.org/wezterm/config/lua/wezterm/nerdfonts.html
 		{ Text = wezterm.nerdfonts.md_folder .. "  " .. cwd },
@@ -263,14 +316,26 @@ wezterm.on("update-status", function(window, pane)
 		{ Text = wezterm.nerdfonts.fa_code .. "  " .. cmd },
 		"ResetAttributes",
 		{ Text = " | " },
-		{ Text = wezterm.nerdfonts.md_clock .. "  " .. time },
-		{ Text = " | " },
-		{ Text = wezterm.nerdfonts.md_earth .. " " .. get_local_ip() },
-		{ Text = " | " },
-		{ Foreground = { Color = bat_color } }, -- yellow
-		{ Text = bat },
-		{ Text = "  " },
-	}))
+	}
+
+	-- Add git branch if available
+	if git_branch then
+		table.insert(status_items, { Foreground = { Color = git_color } })
+		table.insert(status_items, { Text = git_info })
+		table.insert(status_items, "ResetAttributes")
+		table.insert(status_items, { Text = " | " })
+	end
+
+	-- Add remaining status items
+	table.insert(status_items, { Text = wezterm.nerdfonts.md_clock .. "  " .. time })
+	table.insert(status_items, { Text = " | " })
+	table.insert(status_items, { Text = wezterm.nerdfonts.md_earth .. " " .. get_local_ip() })
+	table.insert(status_items, { Text = " | " })
+	table.insert(status_items, { Foreground = { Color = bat_color } })
+	table.insert(status_items, { Text = bat })
+	table.insert(status_items, { Text = "  " })
+
+	window:set_right_status(wezterm.format(status_items))
 end)
 
 return config
